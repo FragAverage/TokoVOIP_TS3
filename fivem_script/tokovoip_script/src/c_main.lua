@@ -21,6 +21,7 @@ local scriptVersion = "1.5.3";
 local animStates = {}
 local displayingPluginScreen = false;
 local HeadBone = 0x796e;
+local radioVolume = 0;
 
 --------------------------------------------------------------------------------
 --	Plugin functions
@@ -59,6 +60,11 @@ RegisterNUICallback("setPlayerTalking", function(data, cb)
 		PlayFacialAnim(PlayerPedId(), "mood_normal_1", "facials@gen_male@base");
 	end
 	cb('ok')
+end)
+
+RegisterNetEvent('TokoVoip:setRadioVolume')
+AddEventHandler('TokoVoip:setRadioVolume', function(volume)
+    radioVolume = volume
 end)
 
 local function clientProcessing()
@@ -151,7 +157,7 @@ local function clientProcessing()
 					uuid = remotePlayerUuid,
 					radioEffect = false,
 					resave = true,
-					volume = 0,
+					volume = radioVolume,
 					muted = 1
 				}
 			end
@@ -163,7 +169,7 @@ local function clientProcessing()
 				end
 
 				founduserData.muted = false
-				founduserData.volume = 0;
+				founduserData.volume = radioVolume;
 				founduserData.posX = 0;
 				founduserData.posY = 0;
 				founduserData.posZ = voip.plugin_data.enableStereoAudio and localPos.z or 0;
